@@ -1,17 +1,10 @@
 from loading import load_directory
 from kmers import stream_kmers, kmer2str
+from collections import Counter
 
 
 def index_file(sequences, k):
-    index = {}
-    for seq in sequences:
-        for kmer, rkmer in stream_kmers(seq, k):
-            minmer = min(kmer, rkmer)
-            if minmer not in index:
-                index[minmer] = 0
-            index[minmer] += 1
-
-    return index
+    return Counter(list_kmers(sequences, k))
 
 
 def intersect_index(index, sequences, k):
@@ -40,6 +33,13 @@ def intersect_index(index, sequences, k):
     return index_uniq, intersection, query_uniq
 
 
+def list_kmers(sequences, k):
+    kmers = []
+    for seq in sequences:
+        kmers.extend([min(kmer, rkmer) for kmer, rkmer in stream_kmers(seq, k)])
+    return kmers
+
+
 def similarity(A, inter, B):
     inter_total =  sum(inter.values())
     A_similarity = inter_total / (inter_total + sum(A.values()) + 1)
@@ -62,7 +62,8 @@ if __name__ == "__main__":
 
     k = 13
 
-    indexes = {f:index_file(files[f], k) for f in files}
+    # indexes = {f:index_file(files[f], k) for f in files}
+    lists = {f:sorted(list_kmers(files[f], k)) for f in files}
     
     filenames = list(files.keys())
     for i in range(len(files)):
