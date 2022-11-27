@@ -1,5 +1,12 @@
+alphabet = {"A":0, "C" : 1, "T":2,"G":3}
+complementaire = {"A" : "T", "T" : "A", "G" : "C", "C": "G"}
 
 def kmer2str(val, k):
+    """ Transform a kmer integer into a its string representation
+    :param int val: An integer representation of a kmer
+    :param int k: The number of nucleotides involved into the kmer.
+    :return str: The kmer string formatted
+    """
     letters = ['A', 'C', 'T', 'G']
     str_val = []
     for i in range(k):
@@ -11,31 +18,16 @@ def kmer2str(val, k):
 
 
 def stream_kmers(text, k):
-    # Precompute the (k-1)-mer (and reverse)
+    # --- To complete ---
+    list_kmer = []
     kmer = 0
-    rkmer = 0
-    for letter in text[:k-1]:
-        # A = 00, C = 01, T = 10, G = 11
-        # Forward kmer
-        kmer <<= 2
-        letter_value = (ord(letter) >> 1) & 0b11
-        kmer += letter_value
-        # Reverse kmer
-        rkmer >>= 2
-        rev_letter_value = (letter_value + 2) & 0b11
-        rkmer += rev_letter_value << (2 * (k - 1))
+    reverse_kmer = 0
+    alph = ['A', 'C', 'G', 'T']
 
-    # Stream kmers
-    mask = (1 << (2 * k)) - 1
-    for letter in text[k-1:]:
-        # Forward kmer
-        kmer <<= 2
-        letter_value = (ord(letter) >> 1) & 0b11
-        kmer += letter_value
-        kmer &= mask
-        # Reverse kmer
-        rkmer >>= 2
-        rev_letter_value = (letter_value + 2) & 0b11
-        rkmer += rev_letter_value << (2 * (k - 1))
 
-        yield kmer, rkmer
+    for i in range(k-1):
+        kmer = kmer << 2  # décale à gauche de 2 bits
+        kmer += alphabet[]
+
+
+
